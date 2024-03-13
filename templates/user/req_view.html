@@ -1,0 +1,45 @@
+{% extends 'user_prof.html' %}  <!-- Assuming you have a base template -->
+{% load static %}
+
+{% block content %}
+
+
+        <h1>Product Requests</h1>
+    
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Requested User</th>
+                    <th>Category ID</th>
+                    <th>Product Name</th>
+                    <th>Image</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if requested_products %}
+                    {% for product in requested_products %}
+                        <tr>
+                            <td>{{ product.requested_user.email }}</td>
+                            <td>{{ product.categ_id.categ_name }}</td>
+                            <td>{{ product.product_name }}</td>
+                            <td>
+                                {% if product.image %}
+                                    <img style="height: 100px; width: 100px;" class="img-fluid" src="{{ product.image.url }}" alt="Product Image">
+                                {% else %}
+                                    <!-- Provide a default image if no image is available -->
+                                    <img style="height: 100px; width: 100px;" class="img-fluid" src="{% static 'img/not-found.svg' %}" alt="Default Image">
+                                {% endif %}
+                            </td>
+                            <td>{{ product.created_at }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No requested products.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        
+{% endblock %}

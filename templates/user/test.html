@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vertical Navbar</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #navbar {
+      height: 100vh;
+      width: 60px;
+      background-color: #333;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      transition: width 0.3s ease; /* Add transition for smooth effect */
+    }
+
+    #navbar.expanded {
+      width: 200px; /* Adjust the expanded width as needed */
+    }
+
+    #navbar a {
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      padding: 15px;
+      font-size: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #navbar a:hover {
+      background-color: #555;
+    }
+
+    #navbar .name {
+      display: none;
+    }
+
+    #navbar.expanded .name {
+      display: block;
+    }
+
+    #toggleBtn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 20px;
+      width: 30px;
+    }
+
+    #toggleBtn div {
+      height: 4px;
+      width: 30px;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toggleBtn" onclick="toggleNavbar()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <div id="navbar">
+    <a href="#" class="icon" onclick="toggleNames('item1')">Icon 1<span class="name">Icon 1</span></a>
+    <a href="#" class="icon" onclick="toggleNames('item2')">Icon 2<span class="name">Icon 2</span></a>
+    <a href="#" class="icon" onclick="toggleNames('item3')">Icon 3<span class="name">Icon 3</span></a>
+  </div>
+
+  <script>
+    function toggleNavbar() {
+      var navbar = document.getElementById('navbar');
+      navbar.classList.toggle('expanded');
+    }
+
+   
+  </script>
+
+</body>
+</html>
+
+

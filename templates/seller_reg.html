@@ -1,0 +1,327 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up & Sign In</title>
+    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+
+    <style>
+body {
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        
+        /* Background image with opacity */
+        body::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{% static 'img/fish_images/children.jpg' %}');
+            background-size: cover;
+            opacity: 0.7; /* Adjust the opacity here */
+            z-index: -1; /* Place the pseudo-element behind the content */
+        }
+        .form-container {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 27px;
+    width: 350px;
+    /* Decreased width */
+    height: 600px;
+    /* Adjusted height as needed */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+span{
+            color:red;
+            margin-left:30px;
+            font-size:15px;
+        }
+        
+    </style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#name').on('input', function () {
+            // Get the value of the username input
+            var username = $(this).val().trim();
+            
+            // Send an AJAX request to Django to check if the username exists
+            $.ajax({
+                url: '/check_username/',  // Replace with your Django URL
+                data: {'username': username},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.exists) {
+                        $('#nameError').text('Username already exists.');
+                    } else {
+                        $('#nameError').text('');
+                    }
+                }
+            });
+        });
+    });
+
+   $(document).ready(function () {
+    $('#email').on('input', function () {
+        // Get the value of the email input
+        var email = $(this).val().trim();
+        
+        if (email) {
+            $.ajax({
+                url: '/check_email/',  // Replace with your Django URL
+                data: {'email': email},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.exists) {
+                        $('#emailError').text('Email already exists');
+                        $('#submitButton').prop('disabled', true);
+                    } else {
+                        $('#emailError').text('');
+                        $('#submitButton').prop('disabled', false);
+                    }
+                },
+                error: function () {
+                    // Handle any AJAX errors here
+                    console.log('Error occurred while checking email existence.');
+                }
+            });
+        } else {
+            $('#emailError').text('');
+            $('#submitButton').prop('disabled', false);
+        }
+    });
+});
+
+
+
+    $(document).ready(function () {
+    $('#gstin').on('input', function () {
+        var gstin = $(this).val().trim();
+        if (gstin) {
+            $.ajax({
+                url: '{% url "check-gstin-exists" %}',
+                data: { 'gstin': gstin },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.exists) {
+                        $('#gstin1Error').text('GSTIN already exists');
+                        $('#submitButton').prop('disabled', true);
+                    } else {
+                        $('#gstin1Error').text('');
+                        $('#submitButton').prop('disabled', false);
+                    }
+                }
+            });
+        } else {
+            $('#gstin1Error').text('');
+            $('#submitButton').prop('disabled', false);
+        }
+    });
+});
+</script>
+</head>
+
+
+<body>
+    <div class="form-container active" id="signup-container">
+        <img style ="margin-left:25px;"src="{% static 'img/login/logo.png' %}" alt="Logo" width="300px" height="80px">
+    <form id="signup-form" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+    {% csrf_token %}
+    <input type="text" id="name" placeholder="Username" name="name" required>
+    <span id="nameError" class="error"></span>
+    <span id="name2Error" class="error"></span>
+
+    <input type="email" id="email" placeholder="Email" name="email" required>
+    <span id="emailError" class="error"></span>
+    <span id="email2Error" class="error"></span>
+
+    <input type="text" id="company_name" placeholder="Company name" name="company" required>
+    <span id="companyError" class="error"></span>
+
+    <input type="text" id="gstin" placeholder="GSTIN" name="gstin" required>
+    <span id="gstinError" class="error"></span>
+    <span id="gstin1Error" class="error"></span>
+
+    <div id="responseMessage"></div>
+
+    <label style="margin-left:27px; font-size:15px">Upload Document</label>
+    <input style="margin-left: 25px;" type="file" id="document" placeholder="Document" name="document" required
+    accept="application/pdf" title="Please select a PDF file">
+    <span id="documentError" class="error"></span>
+
+    <input type="password" id="password" placeholder="Password" name="password" required>
+    <span id="passwordError" class="error"></span>
+
+    <input type="password" id="confirmPassword" placeholder="Confirm Password" name="confirmPassword" required>
+    <span id="confirmPasswordError" class="error"></span>
+
+    <button class="submitbtn" type="submit" id="submitButton">Sign Up</button>
+    <!-- <p class="or"> OR</p> -->
+</form>
+
+<script>
+    // Function to validate username
+    function validateUsername() {
+        var usernameInput = document.getElementById("name");
+        var username = usernameInput.value;
+        var usernameRegex = /^[a-zA-Z][a-zA-Z0-9]*$/;
+        if (!usernameRegex.test(username)) {
+            document.getElementById("name2Error").textContent = "Username must start with alphabets and contain only alphanumeric characters.";
+            return false;
+        }
+        document.getElementById("name2Error").textContent = "";
+        return true;
+    }
+
+    // Function to validate email
+    function validateEmail() {
+        var emailInput = document.getElementById("email");
+        var email = emailInput.value;
+        var emailRegex = /\S+@\S+\.\S+/;
+        if (!emailRegex.test(email)) {
+            document.getElementById("email2Error").textContent = "Please enter a valid email address.";
+            return false;
+        }
+        document.getElementById("email2Error").textContent = "";
+        return true;
+    }
+
+    // Function to validate company name
+    function validateCompany() {
+        var companyInput = document.getElementById("company_name");
+        var company = companyInput.value;
+        if (company.trim() === "") {
+            document.getElementById("companyError").textContent = "Company name cannot be empty.";
+            return false;
+        }
+        document.getElementById("companyError").textContent = "";
+        return true;
+    }
+
+    // Function to validate GSTIN
+    function validateGSTIN() {
+        var gstinInput = document.getElementById("gstin");
+        var gstin = gstinInput.value;
+        var gstinRegex = /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/;
+        if (!gstinRegex.test(gstin)) {
+            document.getElementById("gstinError").textContent = "Please enter a valid GSTIN.";
+            return false;
+        }
+        document.getElementById("gstinError").textContent = "";
+        return true;
+    }
+
+    // Function to validate document
+    function validateDocument() {
+    var documentInput = document.getElementById("document");
+    var document = documentInput.value;
+
+    // Check if a file is selected
+    if (document.trim() === "") {
+        document.getElementById("documentError").textContent = "Please select a file.";
+        return false;
+    }
+
+    // Check the file extension
+    var allowedExtensions = ["pdf"]; // Add more extensions if needed
+    var fileExtension = document.split('.').pop().toLowerCase();
+    
+    if (allowedExtensions.indexOf(fileExtension) === -1) {
+        document.getElementById("documentError").textContent = "Please select a PDF file.";
+        return false;
+    }
+
+    document.getElementById("documentError").textContent = "";
+    return true;
+}
+
+
+    // Function to validate password
+
+    // Function to check if password and confirm password match
+function validatePasswordMatch() {
+     var passwordInput = document.getElementById("password");
+    var confirmPasswordInput = document.getElementById("confirmPassword");
+    var password = passwordInput.value;
+    var confirmPassword = confirmPasswordInput.value;
+
+    var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*()_+,.?]{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+        document.getElementById("passwordError").textContent = "Password must contain at least 8 characters with at least one digit, one lowercase letter, and one uppercase letter.";
+        document.getElementById("confirmPasswordError").textContent = "";
+        return false;
+    }
+
+    if (password !== confirmPassword) {
+        document.getElementById("passwordError").textContent = "Passwords do not match.";
+        document.getElementById("confirmPasswordError").textContent = "Passwords do not match.";
+        return false;
+    }
+
+    document.getElementById("passwordError").textContent = "";
+    document.getElementById("confirmPasswordError").textContent = "";
+    return true;
+}
+
+// Add event listener to both password and confirm password fields
+
+
+    // Function to check if all validations are successful
+    function validateForm() {
+        return (
+            validateUsername() &&
+            validateEmail() &&
+            validateCompany() &&
+            validateGSTIN() &&
+            validateDocument() &&
+           validatePasswordMatch()
+        );
+    }
+
+    // Add event listeners to input fields for real-time validation
+    var usernameInput = document.getElementById("name");
+    usernameInput.addEventListener("input", validateUsername);
+
+    var emailInput = document.getElementById("email");
+    emailInput.addEventListener("input", validateEmail);
+
+    var companyInput = document.getElementById("company_name");
+    companyInput.addEventListener("input", validateCompany);
+
+    var gstinInput = document.getElementById("gstin");
+    gstinInput.addEventListener("input", validateGSTIN);
+
+    var documentInput = document.getElementById("document");
+    documentInput.addEventListener("change", validateDocument);
+
+   var passwordInput = document.getElementById("password");
+passwordInput.addEventListener("input", validatePasswordMatch);
+
+var confirmPasswordInput = document.getElementById("confirmPassword");
+confirmPasswordInput.addEventListener("input", validatePasswordMatch);
+
+
+    // Add event listener to form submission
+    var signupForm = document.getElementById("signup-form");
+    signupForm.addEventListener("submit", function (event) {
+        if (!validateForm()) {
+            event.preventDefault(); // Prevent form submission if validation fails
+        }
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% extends 'user_prof.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .req_img{
+        width: 100px;
+        height: 100px;
+    }
+</style>
+
+<h1>Product Requests</h1><br><br>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Email</th>
+            <th>Category</th>
+            <th>Product Name</th>
+            <th>Image</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product_request in product_requests|dictsortreversed:"created_at" %}
+        <tr>
+            <td>{{ product_request.requested_user.email }}</td>
+            <td>{{ product_request.categ_id }}</td>
+            <td>{{ product_request.product_name }}</td>
+            <td>
+                {% if product_request.image %}
+                    <img class="req_img" src="{{ product_request.image.url }}" alt="Product Image">
+                {% else %}
+                    <img class="req_img" src="{% static 'img/not-found.svg' %}" alt="Default Image">
+                {% endif %}
+            </td>
+            <td>{{ product_request.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    
+</table>
+
+
+
+
+{% endblock%}

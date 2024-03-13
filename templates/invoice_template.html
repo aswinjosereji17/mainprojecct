@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Invoice</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .invoice-container {
+            /* border: 1px solid #ddd;
+            border-radius: 10px; */
+            padding: 30px;
+            margin: 50px auto;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            max-width: 80px;
+            border-radius: 50%;
+        }
+
+        .invoice-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            max-width: 80px;
+            border-radius: 50%;
+            margin-right: 20px; /* Adjust the margin as needed */
+        }
+
+        .invoice-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Align items vertically in the center */
+            margin-bottom: 30px;
+        }
+
+
+        table,th,tr,td {
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+
+        .table {
+            border: 1px solid #ddd; /* Add border for the table */
+        }
+
+        .table th, .table td {
+            border: 1px solid #ddd; 
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table thead th {
+            border: none;
+            background-color: #0f4370; /* Change the primary color here */
+            color: #fff;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .product-column {
+            border-right: 1px solid #ddd; /* Add border between Product Name and Price */
+        }
+
+        .total-price {
+            font-size: 20px;
+            font-weight: bold;
+            /* margin-top: 20px; */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container invoice-container">
+        <div class="row invoice-details">
+            <div class="col-md-6 text-right">
+                <h1  class="invoice-title" style="text-align: center; color: rgb(2, 2, 66);">AQUEON</h1>
+            </div>
+            <div class="col-md-6 text-right">
+                <h1 class="invoice-title" style="text-align: center;"><u>Invoice for Order #{{ order.id }}</u></h1>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-md-6">
+                <p style="font-size: 14px;"><strong>Order Date:</strong> {{ order.order_date }}</p>
+            </div>
+        </div>
+    
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover">
+                    <thead style="background-color: yellow;" class="thead-dark">
+                        <tr>
+                            <th scope="col" class="product-column" style="font-size: 14px;">Product Name</th>
+                            <th scope="col" style="font-size: 14px;">Quantity</th> <!-- Add this column for quantity -->
+                            <th scope="col" style="font-size: 14px;">Price</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order_item in order.orderitem_set.all %}
+                            <tr>
+                                <td class="product-column" style="font-size: 12px;">{{ order_item.product.prod_name }}</td>
+                                <td style="font-size: 12px;">{{ order_item.quantity }}</td> <!-- Display quantity -->
+                                <td style="font-size: 12px;">Rs.{{ order_item.product.price }}</td>
+                                
+                            </tr>
+                        {% endfor %}
+                        <!-- <tr>
+                            <td style="font-size: 14px;"><b>Items:{{ order.cart_items.count }}</b></td>
+                            <td style="font-size: 14px;">  </td>
+                            <td style="font-size: 14px;"><b>Rs.{{ order.total_price }}</b></td>
+                        </tr> -->
+                    </tbody>
+                    
+                </table>
+            </div>
+        </div><hr>
+        <div class="col-md-6">
+            <div style="text-align: right;">
+                <!-- <p style="font-size: 16px; margin-bottom: -190px;"><b>Total Price: Rs.{{ order.total_price }}</b></p> -->
+                <p style="font-size: 16px;"><b>Total Price: Rs.{{ order.total_price }}</b></p>
+            </div>
+        </div>
+        <hr>
+    </div>    
+
+    <!-- Bootstrap JS and Popper.js are required for some Bootstrap components -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

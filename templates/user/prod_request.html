@@ -1,0 +1,53 @@
+{% extends 'user_prof.html' %}
+
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Request</title>
+    <!-- Include Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+</head>
+<script>
+    function validateImage(event) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const file = event.target.files[0];
+    const errorElement = document.getElementById('reqImageError'); // Fixing typo here
+
+    if (file) {
+        if (allowedTypes.includes(file.type)) {
+            errorElement.textContent = ''; // Clear any previous error message
+            document.getElementById('submitBtn').removeAttribute('disabled');
+        } else {
+            errorElement.textContent = 'Only JPEG, PNG, and GIF images are allowed.'; // Display error message
+            document.getElementById('submitBtn').setAttribute('disabled', 'true');
+        }
+    }
+}
+</script>
+
+<body>
+    <h1>Request Product</h1></br></br>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="categ_id">Category:</label>
+        <select id="categ_id" name="categ_id">
+            {% for category in categories %}
+                <option value="{{ category.categ_id }}">{{ category.categ_name }}</option>
+            {% endfor %}
+        </select></br></br>
+
+        <label for="sub_cat_name">Product Name:</label>
+        <input type="text" id="sub_cat_name" name="sub_cat_name" required><br>
+        <span style="color:red" id="subCatNameError" class="error"></span></br>
+
+        <label for="subcat_image">Product Image:</label>
+        <input type="file" id="subcat_image" name="subcat_image" onchange="validateImage(event)"><br></br>
+        <span style="color:red" id="reqImageError"></span></br>
+
+
+        <button style="border-radius:5px" type="submit" id="submitBtn" >Request Product</button>
+    </form>
+</body>
+{% endblock %}

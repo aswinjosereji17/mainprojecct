@@ -1,0 +1,91 @@
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+<head>
+
+
+<style>
+.error {
+    background-color: red !important;
+    color: white !important;
+}
+</style>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+   $(document).ready(function () {
+    $('#categ_name').on('input', function () {
+        var categName = $(this).val().trim();
+        if (categName) {
+            $.ajax({
+                url: '{% url "check-category-exists" %}',
+                data: { 'categ_name': categName },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.exists) {
+                        $('#error-message').text('Category name already exists');
+                        $('#save_cat').addClass('error'); // Add error class for styling
+                        $('button[type="submit"]').prop('disabled', true);
+                    } else {
+                        $('#error-message').text('');
+                        $('#save_cat').removeClass('error'); // Remove error class
+                        $('button[type="submit"]').prop('disabled', false);
+                    }
+                }
+            });
+        } else {
+            $('#error-message').text('');
+            $('#save_cat').removeClass('error'); // Remove error class
+            $('button[type="submit"]').prop('disabled', false);
+        }
+    });
+});
+
+
+function validateImage(event) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const file = event.target.files[0];
+    const errorElement = document.getElementById('catImageError'); // Fixing typo here
+
+    if (file) {
+        if (allowedTypes.includes(file.type)) {
+            errorElement.textContent = ''; // Clear any previous error message
+            document.getElementById('save_cat').removeAttribute('disabled');
+        } else {
+            errorElement.textContent = 'Only JPEG, PNG, and GIF images are allowed.'; // Display error message
+            document.getElementById('save_cat').setAttribute('disabled', 'true');
+        }
+    }
+}
+
+    </script>
+    
+    
+
+</head>
+<div>
+    <h1>Add Product Category</h1></br>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <label for="categ_name">Category Name:</label>
+            <input type="text" name="categ_name" id="categ_name" required></br>
+            <span id="error-message" style="color: red;"></span>
+        </div></br>
+        <div>
+            <label for="categ_image">Category Image:</label>
+            <input type="file" name="categ_image" id="categ_image" accept="image/*" onchange="validateImage(event)" required><br>
+            <span style="color:red" id="catImageError"></span></br>
+
+        </div>
+        <button id ="save_cat" type="submit">Save</button>
+    </form>
+</div>
+
+
+
+
+    {% endblock%}
+  

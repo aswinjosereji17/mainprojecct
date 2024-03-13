@@ -1,0 +1,119 @@
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+  <style>
+    /* Apply styles to the table */
+.product-table {
+    width: 50%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+/* Apply styles to table header (th) */
+.product-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Apply styles to table data (td) */
+.product-table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Add hover effect on table rows */
+.product-table tr:hover {
+    background-color: #e0e0e0;
+}
+button{
+    border-radius: 5px;
+}
+
+th{
+    text-align: center;
+}
+
+  </style>
+
+ <div class="pagetitle">
+      <h1>Product List</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+    </div><form id="product-search-form">
+      <label for="product-name" class="search-label">Search by Product Name:</label>
+      <input type="text" id="product-name" name="product-name" class="search-input">
+      <button type="button" class="search-button">Search</button>
+  </form>
+
+  <table class="product-table" style="margin-top: 50px;">
+      <thead>
+          <tr>
+              <!-- <th>Product ID</th> -->
+              <th style="text-align: center;">Product Name</th>
+              <th style="text-align: center;">Category</th>
+              <th style="text-align: center;">Sub Category</th>
+
+              <th style="text-align: center;">Price</th>
+              <th style="text-align: center;">Image</th>
+              <th style="text-align: center;">Stock quantity</th>
+              <!-- <th style="text-align: center;">Action</th> -->
+
+          </tr>
+      </thead>
+      <tbody>
+          {% for prods in products %}
+              <tr>
+                  <!-- <td>{{ prods.prod_id }}</td> -->
+                  <td>{{ prods.prod_name }}</td>
+                  <td>{{ prods.sub_categ_id.categ_id.categ_name }}</td>
+                  <td>{{ prods.sub_categ_id.sub_cat_name }}</td>
+                  <td>Rs.{{ prods.price }}</td>
+                  <td><img style="width : 100px; height: 100px;" src="{{ prods.productdescription.img1.url }}" alt="{{ prods.prod_name }} - Image 1" ></td>
+                  <td>{{ prods.stock_quantity }}</td>
+                  <td><button style="background-color: rgb(180, 217, 44);"><a style="color: rgb(2, 10, 18);" href="{% url 'modify_product' prods.prod_id  %}?user_id={{ request.user.id }}">modify</a></button></td>
+                  <td><button style="background-color: red; color: #e0e0e0;"><a style="color: aliceblue;" href="{% url 'delete_product' prods.prod_id %}">Delete</a></button></td>
+                </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+
+  <span id="no-results" style="display: none;">No matching records found.</span>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('#product-search-form');
+        const input = document.querySelector('#product-name');
+        const rows = document.querySelectorAll('.product-table tbody tr');
+        const noResults = document.querySelector('#no-results');
+
+        input.addEventListener('input', function () {
+            const searchTerm = input.value.toLowerCase();
+
+            rows.forEach(function (row) {
+                const productName = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                if (productName.startsWith(searchTerm)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            const visibleRows = [...rows].filter(row => row.style.display !== 'none');
+            if (visibleRows.length === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+  
+{% endblock%}

@@ -1,0 +1,103 @@
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+
+<h1>Product Sub Categories</h1></br></br>
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Subcategory Name</th>
+             <th>Category Name</th>
+            <th>Image</th>
+            <th>Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Loop through subcategories -->
+{% for subcat in subcategories %}
+<tr>
+    <td>{{ subcat.sub_cat_name }}</td>
+    <td>{{ subcat.categ_id.categ_name }}</td>
+    <td>
+        {% if subcat.subcat_image %}
+        <img style="height: 100px; width: 100px;" src="{{ subcat.subcat_image.url }}" alt="{{ subcat.sub_cat_name }}" class="img-thumbnail" width="100">
+        {% else %}
+        No Image
+        {% endif %}
+    </td>
+    <td>{{ subcat.created_at }}</td>
+    <td>
+        <!-- Add an Edit button to trigger the edit form or modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editSubCategoryModal{{ subcat.sub_cat_id }}">
+            Edit
+        </button>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteSubcategoryModal{{ subcat.sub_cat_id }}">
+            Delete
+        </button>
+    </td>
+</tr>
+
+
+ <!-- Modal for deleting subcategory -->
+ <div class="modal fade" id="deleteSubcategoryModal{{ subcat.sub_cat_id }}" tabindex="-1" role="dialog" aria-labelledby="deleteSubcategoryModalLabel{{ subcat.sub_cat_id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteSubcategoryModalLabel{{ subcat.sub_cat_id }}">Delete Subcategory</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "{{ subcat.sub_cat_name }}"?</p>
+                <!-- Add a form for submitting the delete request -->
+                <form method="post" action="{% url 'delete_subcategory' subcat.sub_cat_id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for editing subcategory -->
+<div class="modal fade" id="editSubCategoryModal{{ subcat.sub_cat_id }}" tabindex="-1" role="dialog" aria-labelledby="editSubCategoryModalLabel{{ subcat.sub_cat_id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSubCategoryModalLabel{{ subcat.sub_cat_id }}">Edit Subcategory</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add your form fields for editing subcategory here -->
+                <!-- You can use Django forms or simple input fields -->
+                <form method="post" enctype="multipart/form-data" action="{% url 'edit_subcategory' subcat.sub_cat_id %}">
+                    {% csrf_token %}
+                    <!-- Add your form fields here -->
+                    <input type="text" name="edited_sub_cat_name" value="{{ subcat.sub_cat_name }}">
+                    <select name="edited_categ_id">
+                        <!-- Loop through categories to populate the dropdown -->
+                        {% for category in categories %}
+                        <option value="{{ category.categ_id }}" {% if category.categ_id == subcat.categ_id.categ_id %}selected{% endif %}>
+                            {{ category.categ_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <input type="file" name="edited_subcat_image">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+    </tbody>
+</table>
+
+
+    {% endblock%}

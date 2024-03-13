@@ -1,0 +1,266 @@
+{% load static%}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up & Sign In</title>
+    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+
+    <style>
+body {
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        
+        /* Background image with opacity */
+        body::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{% static 'img/fish_images/children.jpg' %}');
+            background-size: cover;
+            opacity: 0.7; /* Adjust the opacity here */
+            z-index: -1; /* Place the pseudo-element behind the content */
+        }
+        span{
+            color:red;
+            margin-left:30px;
+            font-size:15px;
+        }
+        
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#username').on('input', function () {
+            // Get the value of the username input
+            var username = $(this).val().trim();
+            
+            // Send an AJAX request to Django to check if the username exists
+            $.ajax({
+                url: '/check_username/',  // Replace with your Django URL
+                data: {'username': username},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.exists) {
+                        $('#username2Error').text('Username already exists.');
+                    } else {
+                        $('#username2Error').text('');
+                    }
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $('#email').on('input', function () {
+            // Get the value of the email input
+            var email = $(this).val().trim();
+            
+            // Send an AJAX request to Django to check if the email exists
+            $.ajax({
+                url: '/check_email/',  // Replace with your Django URL
+                data: {'email': email},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.exists) {
+                        $('#email2Error').text('Email already exists.');
+                    } else {
+                        $('#email2Error').text('');
+                    }
+                }
+            });
+        });
+    });
+</script>
+</head>
+<body>
+{% comment %} <div class="overlay"></div> {% endcomment %}
+{% comment %} <body style="background-image: url('{% static 'img/fish_images/lionfish.jpg' %}'); background-size: cover; background-opacity: 9;"> {% endcomment %}
+    <div class="form-container active" id="signup-container">
+        <img style ="margin-left:25px;"src="{% static 'img/login/logo.png' %}" alt="Logo" width="300px" height="80px">
+        <form id="signup-form"method="post" onsubmit="return validateRegistrationForm()">
+            {% csrf_token %}
+            <input type="text" id="username" placeholder="Username" name="name" >
+            <span id="usernameError" class="error"></span> 
+            <span id="username2Error" class="error"></span>        
+            <input type="email" id="email" placeholder="Email" name="email" >
+            <span id="emailError" class="error"></span>
+            <span id="email2Error" class="error"></span>
+            <input type="password" id="password" placeholder="Password" name="password" >
+            <span id="passwordError" class="error"></span>
+
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" name="confirmPassword" >
+            <span id="confirmPasswordError" class="error"></span>
+
+            <button class="submitbtn" type="submit">Sign Up</button>
+             <p class="or"> OR</p>
+                    {% comment %} <button class="googlebtn" type="submit"><div class="imggoog"><img  src="{% static 'img/login/googleimg.png' %}"></div>Sign Up with Google</button> {% endcomment %}
+        </form>
+        <a style="text-decoration: none;" href="{% provider_login_url 'google'%}?next=/"><button style="border-radius: 9px; border-color:rgb(159, 170, 194);" class="googlebtn" ><img src="{% static 'img/login/googleimg.png' %}">Sign Up with Google</button></a>
+
+        {% comment %} <button class="toggle-btn" onclick="toggleForm()">Already have an account? Sign In</button> {% endcomment %}
+    <p  style="margin-left:50px">Already have an account?<a href="{% url 'login_user' %}">
+           Sign In
+        </a></p>
+            <p  style="margin-left:50px">Seller registration?<a href="{% url 'seller_register' %}">
+           Seller
+        </a></p>
+    </div> 
+    {% comment %} <div class="form-container" id="signin-container">
+        <img style ="margin-left:25px;"src="{% static 'img/login/logo.png' %}" alt="Logo" width="300px" height="80px">
+        <form id="signin-form">
+        method="post">
+            {% csrf_token %}
+            <p>{{ success_message }}</p>
+            <p>{{ error_message }}</p>
+            <input type="text" id="username" placeholder="Userame" name="username" required>
+            <input type="email" id="email" placeholder="Email" name="email" required>
+            <input type="password" id="password" placeholder="Password" name="password" required>
+            <button class="submitbtn" type="submit">Sign In</button>
+            <input type="email" id="signin-email" placeholder="Email" required>
+            <input type="password" id="signin-password" placeholder="Password" required>
+            <button class="submitbtn" type="submit">Sign In</button> 
+            <p class="or"> OR</p>
+                    <button class="googlebtn" type="submit"><img src="{% static 'img/login/googleimg.png' %}">Sign In with Google</button>
+        </form>
+                <p>Don't have an account?<a href="{% url 'register' %}">
+
+        <button class="toggle-btn" onclick="toggleForm()">Don't have an account? Sign Up</button>
+    </div> {% endcomment %}
+    {% comment %} <script>
+        function toggleForm() {
+            const signupContainer = document.getElementById("signup-container");
+            const signinContainer = document.getElementById("signin-container");
+            signupContainer.classList.toggle("active");
+            signinContainer.classList.toggle("active");
+        }
+    </script> {% endcomment %}
+
+
+
+
+    
+    <script>
+        function validateRegistrationForm() {
+            var username = document.getElementById("username").value;
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+        
+            var usernameError = document.getElementById("usernameError");
+            var emailError = document.getElementById("emailError");
+            var passwordError = document.getElementById("passwordError");
+            var confirmPasswordError = document.getElementById("confirmPasswordError");
+        
+            // Clear previous error messages
+            usernameError.textContent = "";
+            emailError.textContent = "";
+            passwordError.textContent = "";
+            confirmPasswordError.textContent = "";
+        
+            var emailRegex = /\S+@\S+\.\S+/;
+            var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*()_+,.?]{8,}$/;
+        
+          
+            // if (!emailRegex.test(email)) {
+            //     emailError.textContent = "Invalid email";
+            //     return false;
+            // } else {
+            //     emailError.textContent = "";
+            // }
+        
+            // if (password.length < 8) {
+            //     passwordError.textContent = "Password must contain at least 8 characters";
+            //     return false;
+            // } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+            //     passwordError.textContent = "Password must contain one uppercase letter, one lowercase letter, and one digit";
+            //     return false;
+            // } else {
+            //     passwordError.textContent = "";
+            // }
+        
+            // if (password !== confirmPassword) {
+            //     confirmPasswordError.textContent = "Passwords do not match";
+            //     return false;
+            // } else {
+            //     confirmPasswordError.textContent = "";
+            // }
+        
+            // return true;
+        }
+        
+      
+        function getInvalidPasswordMessage(password) {
+            if (password.length < 8) {
+                return "Minimum 8 characters required";
+            } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+                return "Password must contain at least one uppercase letter, one lowercase letter, and one digit";
+            } else {
+                return "";
+            }
+        }
+        
+          
+        function getInvalidNameMessage(username) {
+      if (/^\d/.test(username)) {
+          return "First letter - alphabet";
+      } else if ((username.match(/\d/g) || []).length > 2) {
+          return "Maximum 2 numbers are allowed";
+      } else if (username.length < 4 || username.length > 20) {
+          return "Username length should be between 4 and 20 characters";
+      } else if (!/^(?=(?:[^a-z]*[a-z]){2,}[^a-z]*$)/.test(username)) {
+          return "Use minimum 2 lowercase letters";
+      }  else {
+          return " ";
+      }
+  }
+      
+        var nameInput = document.getElementById("username");
+        var emailInput = document.getElementById("email");
+        var passwordInput = document.getElementById("password");
+        var confirmPasswordInput = document.getElementById("confirmPassword");
+      
+        // Add input event listener to name input
+        nameInput.addEventListener("input", function() {
+          var username = nameInput.value;
+          var errorMessage = getInvalidNameMessage(username);
+          document.getElementById("usernameError").textContent = errorMessage;
+        });
+      
+        // Add input event listener to mobile input
+        
+          
+      
+      
+        // Add input event listener to email input
+        emailInput.addEventListener("input", function() {
+          var email = emailInput.value;
+          var errorMessage = /\S+@\S+\.\S+/.test(email) ? "" : "Invalid email address";
+          document.getElementById("emailError").textContent = errorMessage;
+        });
+      
+        // Add input event listener to password input
+        passwordInput.addEventListener("input", function() {
+          var password = passwordInput.value;
+          var errorMessage = getInvalidPasswordMessage(password);
+          document.getElementById("passwordError").textContent = errorMessage;
+        });
+      
+        // Add input event listener to confirm password input
+        confirmPasswordInput.addEventListener("input", function() {
+          var confirmPassword = confirmPasswordInput.value;
+          var password = passwordInput.value;
+          var errorMessage = confirmPassword === password ? "" : "Passwords do not match";
+          document.getElementById("confirmPasswordError").textContent = errorMessage;
+        });
+        </script>
+</body>
+</html>

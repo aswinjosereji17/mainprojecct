@@ -1,0 +1,112 @@
+<!-- add_community_post.html -->
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+
+
+<div class="container mt-5">
+    <h2>Add Community Post</h2>
+    <form id="communityPostForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="heading">Heading:</label>
+            <input type="text" class="form-control" id="heading" name="heading" required>
+            <span id="headingError" style="color: red;"></span>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+            <span id="descriptionError" style="color: red;"></span>
+        </div>
+        <div class="form-group">
+            <label for="image">Image:</label>
+            <input type="file" class="form-control-file" id="image" name="image">
+            <span id="imageError" style="color: red;"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitButton" disabled>Submit</button>
+    </form>
+</div>
+
+<script>
+    // Function to validate the form using AJAX
+    function validateForm() {
+        var heading = $('#heading').val();
+        var description = $('#description').val();
+        var image = $('#image')[0].files[0];
+        var isValid = true;
+
+        // Validate heading
+        if (!/^[A-Za-z]/.test(heading)) {
+            $('#headingError').text("Heading should start with a letter.");
+            isValid = false;
+        } else {
+            $('#headingError').text("");
+        }
+
+        // Validate description
+        if (!/^[A-Za-z]/.test(description)) {
+            $('#descriptionError').text("Description should start with a letter.");
+            isValid = false;
+        } else {
+            $('#descriptionError').text("");
+        }
+
+        // Validate image
+        if (!image) {
+            $('#imageError').text("Please select an image.");
+            isValid = false;
+        } else {
+            var validExtensions = ["jpg", "jpeg", "png", "gif"];
+            var imageExtension = image.name.split('.').pop().toLowerCase();
+            if (validExtensions.indexOf(imageExtension) === -1) {
+                $('#imageError').text("Invalid image file format. Only JPG, JPEG, PNG, or GIF are allowed.");
+                isValid = false;
+            } else {
+                $('#imageError').text("");
+            }
+        }
+
+        // Enable or disable submit button based on form validity
+        $('#submitButton').prop('disabled', !isValid);
+
+        return isValid;
+    }
+
+    // Add event listeners to validate fields on input or change
+    $('#heading').on('input', validateForm);
+    $('#description').on('input', validateForm);
+    $('#image').on('change', validateForm);
+
+    // AJAX form submission
+    $('#communityPostForm').on('submit', function(event) {
+        event.preventDefault();
+        var formData = new FormData($(this)[0]);
+
+        $.ajax({
+            url: '/add/', // Update with your backend endpoint
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                // Handle successful response from the server
+                window.location.href = '/user_posts';
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle errors
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>
+
+    <!-- Bootstrap JS scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    
+{% endblock%}

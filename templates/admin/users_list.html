@@ -1,0 +1,130 @@
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+
+<h1>Users List</h1></br></br>
+
+<label for="roleFilter">Filter by Role:</label>
+<select style=" border-radius:5px; border: 1px solid gray;" id="roleFilter">
+    <option value="all">All</option>
+    <option value="superuser">Admin</option>
+    <option value="staff">Seller</option>
+    <option value="user">User</option>
+</select></br></br>
+
+
+<form id="product-search-form">
+      <label for="product-name" class="search-label">Search by Email:</label>
+<div class="input-group">
+    
+    <input style="width:400px; border-radius:5px; border: 1px solid gray; margin-right:2px" type="text" id="product-name" name="product-name" class="" placeholder="Search by email">
+    <div class="input-group-prepend">
+        <button class="btn btn-outline-secondary" type="button">
+            <i class="ri-search-2-line"></i>
+        </button>
+    </div>
+</div>
+
+ </form></br></br>
+<table id="product-table" class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            {% comment %} <th>Mobile</th> {% endcomment %}
+            <th>Role</th>
+            {% comment %} <th>Image</th> {% endcomment %}
+            <th>Joined At</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr data-role="{% if user.is_superuser %}superuser{% elif user.is_staff %}staff{% else %}user{% endif %}">
+            <td>{{ user.email }}</td>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            {% comment %} <td>{{ user.userprofile.mobile }}</td> {% endcomment %}
+            <td>{% if user.is_superuser %}
+    Admin
+{% elif user.is_staff %}
+    Seller
+{% else %}
+    User
+{% endif %}</td>
+            {% comment %} <td>
+            {% if user.userprofile.profile_image %}
+            <img style="height: 100px; width: 100px;" src="{{ user.userprofile.profile_image.url }}" alt="{{ user.username }}" class="img-thumbnail" width="100">
+            {% else %}
+            No Image
+            {% endif %}
+        </td> {% endcomment %}
+            <td>{{ user.date_joined }}</td>
+            <td>{% if user.is_active %}<form method="post" action="{% url 'deactivate_user' user.id %}">
+                {% csrf_token %}
+                <button style="background-color: red; border: none; padding: 5px; width: 120px; color: white; border-radius: 6px;" type="submit">Deactivate</button>
+            </form>{% else %}<form method="post" action="{% url 'activate_user' user.id %}">
+                {% csrf_token %}
+                <button style="background-color: green; border: none; width: 120px; padding: 5px; color: white; border-radius: 6px;" type="submit">Activate</button>
+            </form>{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('#product-search-form');
+        const input = document.querySelector('#product-name');
+        const rows = document.querySelectorAll('#product-table tbody tr');
+        const noResults = document.querySelector('#no-results');
+
+        input.addEventListener('input', function () {
+            const searchTerm = input.value.toLowerCase();
+
+            rows.forEach(function (row) {
+                const productName = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                if (productName.startsWith(searchTerm)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            const visibleRows = [...rows].filter(row => row.style.display !== 'none');
+            if (visibleRows.length === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+    // Add an event listener for the role filter dropdown
+    $('#roleFilter').on('change', function () {
+        var selectedRole = $(this).val();
+        
+        // Hide all rows
+        $('#product-table tbody tr').hide();
+        
+        // Show rows based on the selected role
+        if (selectedRole === 'all') {
+            $('#product-table tbody tr').show();
+        } else {
+            $('#product-table tbody tr[data-role="' + selectedRole + '"]').show();
+        }
+    });
+});
+</script>
+
+
+    {% endblock%}

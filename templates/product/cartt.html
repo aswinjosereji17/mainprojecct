@@ -1,0 +1,259 @@
+{% extends 'user_prof.html' %}
+
+{% load static %}
+{% block content %}
+<head>
+
+    <!-- Your existing HTML code -->
+
+<!-- Add this script section at the end of your HTML file -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function updateCartItemQuantity(cartItemId, action) {
+        $.ajax({
+            type: 'POST',
+            url: '{% url "update_cart_quantity" %}',
+            data: {
+                'cart_item_id': cartItemId,
+                'action': action,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (data) {
+                // You can update the UI as needed
+                $('.b1').load(location.href + ' .b1');
+                                    },
+            error: function (xhr, errmsg, err) {
+                console.error(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    }
+</script>
+
+</head>
+
+
+
+
+
+
+
+
+<div class="b1">
+    
+
+<div class="pagetitle">
+    <h1>Shopping Cart</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Users</li>
+        <li class="breadcrumb-item active">Shopping Cart</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+ 
+ 
+  {% if cart %}
+
+<div class="cart-container">
+    <div class="cart-items-container">
+
+        {% if cart_items|length == 0 %}
+        <div class="container text-center mt-5">
+          <div class="row justify-content-center">
+            <div class="col-md-6">
+              <div class="card border-0 shadow">
+                <div class="card-body p-5">
+                  <h1 class="display-4">Your Aqueon Cart is Empty</h1>
+                  <p class="lead">Explore our amazing products and add some to your cart!</p>
+                  <a href="{% url 'index' %}" class="btn btn-primary btn-lg">Browse Products</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        {% endif %}
+
+
+        {% for item in cart_items %}
+
+        <div class="cart-items">
+            <!-- Repeat this block for each item in the cart -->
+            <div class="cart-item">
+
+                <div style="display: flex; gap: 40px; flex-direction: column;">
+                    <div>
+                        <img onclick="navigateToSubcategories('{{ item.prod.prod_id }}')" src="{{ item.prod.productdescription.img1.url }}" alt="Product Image">
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-direction: row;">
+                        <div style="height: 25px; width: 25px; border-radius: 5px; color: black; background-color: #FFD333; text-align: center;"
+                        onmouseover="this.style.cursor='pointer';" onmouseout="this.style.cursor='default';"
+                        onclick="updateCartItemQuantity({{ item.cart_item_id }}, 'decrement')">
+                        -
+                    </div>
+                    <div>
+                        <input style="text-align:center;  width:40px; border:none; outline:none;" type="number"
+                                    id="quantity" name="quantity" value="{{ item.quantity }}" min="1"  required>
+                            <!-- <input style="width: 30px; text-align: center;" type="number" id="quantity" name="quantity"
+                                value="" min="1"> -->
+                        </div>
+                        <div style="height: 25px; width: 25px; border-radius: 5px; color: black; background-color: #FFD333; text-align: center;"
+    onclick="updateCartItemQuantity({{ item.cart_item_id }}, 'increment')"
+    onmouseover="this.style.cursor='pointer';" onmouseout="this.style.cursor='default';">
+    +
+</div>
+
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column;">
+                    <div class="product-details">
+                        <h5 style="color: black;"><b>{{ item.prod.prod_name }} </b></h5>
+                        <p>Price : {{ item.prod.price }}</p>
+                        {% if item.prod.stock_quantity == 0 %}
+                          <p style="color: red;">Out of Stock</p>
+                        {% else %}
+                          <p style="color: green;">In Stock</p>
+                        {% endif %}
+    
+                        <p id="total_price_{{ item.cart_item_id }}"> Total Price: Rs.{{ item.total_price }}</p>
+                    </div>
+                    <div class="quantity">
+
+                    </div>
+                    <form method="post" action="{% url 'remove_cart_item' item.cart_item_id %}">
+                        <!-- </div> -->
+                        {% csrf_token %}
+                        <!-- <button style="border-radius: 5px; background-color:red; margin-top:9px;" type="submit"
+                            class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash"> Remove</i>
+                        </button> -->
+                        <button style="background-color: white; color: darkred; border: none;"
+                            type="submit"><b>REMOVE</b></button>
+                    </form>
+                </div>
+            </div>
+            <script>
+                function navigateToSubcategories(prodId) {
+                 window.location.href = `/prod_desc/${prodId}/`;
+                         }
+             </script>
+
+            <!-- End of cart item block -->
+        </div> 
+        {% endfor %}
+        {% endif %}
+
+
+    </div>
+
+    {% if cart_items|length == 0 %}
+
+    {% else %}
+
+
+    <div class="cart-summary">
+        <h5>Cart Summary</h5>
+        <p>Subtotal        Rs. {{ total_cart_value|default:"0.00" }}</p>
+        <p class="font-weight-medium">Shipping {% if cart_items|length == 0 %}Rs.0.00 {% else %} Rs.50 {% endif %}</p>
+        <p>Total {% if cart_items|length == 0 %}Rs.0.00 {% else %} Rs. {{ multiplied_value|floatformat:2 }}{% endif %}
+        </p>
+
+        <form action="{% url 'homepage' %}">
+
+        <button id="pay-btn" class="checkout-btn">Proceed to Checkout</button>
+    </form>
+
+    </div>
+    {% endif %}
+
+    
+</div>
+
+</div>
+
+<style>
+    .cart-container {
+        max-width: 1000px;
+        /* Adjust the max-width as needed */
+        margin: 20px auto;
+        display: flex;
+    }
+
+    .cart-items-container {
+        flex-grow: 1;
+        max-height: 600px;
+        overflow-y: auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-right: 8px;
+        margin-bottom: 20px;
+        scrollbar-width: thin;
+        /* For Firefox */
+        scrollbar-color: transparent transparent;
+        /* For Firefox */
+    }
+
+    /* Webkit (Chrome, Safari) scrollbar customization */
+    .cart-items-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .cart-items-container::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
+    .cart-items {
+        margin-bottom: 20px;
+    }
+
+    .cart-item {
+        display: flex;
+        border-bottom: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .cart-item img {
+        width: 100px;
+        border-radius: 5px;
+        height: 100px;
+        margin-right: 55px;
+    }
+
+    .product-details {
+        flex-grow: 1;
+    }
+
+    .quantity {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity label {
+        margin-right: 5px;
+    }
+
+    .cart-summary {
+        width: 250px;
+        /* Adjust the width as needed */
+        height: 100%;
+        overflow-y: auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .checkout-btn {
+        padding: 10px;
+        background-color: #FFD333;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
+</style>
+
+</style>
+
+{% endblock %}

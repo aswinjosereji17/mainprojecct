@@ -1,0 +1,318 @@
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+
+<head>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  {% comment %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> {% endcomment %}
+  <script>
+    $(document).ready(function () {
+
+      var saveButton = $('#saveButton');
+
+      $('#product_name').on('input', function () {
+        // Get the value of the product name input and trim leading/trailing spaces
+        var productName = $(this).val().trim();
+
+        // Send an AJAX request to Django to check if the trimmed product name exists
+        $.ajax({
+          url: '/check_product_name/',  // Replace with your Django URL
+          data: { 'product_name': productName },
+          dataType: 'json',
+          success: function (data) {
+            if (data.exists) {
+              $('#pnameError').text('Product name already exists.');
+              saveButton.prop('disabled', true);
+            } else {
+              $('#pnameError').text('');
+              saveButton.prop('disabled', false);
+            }
+          }
+        });
+      });
+    });
+  </script>
+
+
+  <style>
+    /* Style the form container */
+    .product-form {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* Style form groups */
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    /* Style labels */
+    .form-group label {
+      font-weight: bold;
+      display: block;
+    }
+
+    /* Style form controls */
+    .form-control {
+      width: 384px;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* Style file input */
+    .form-control-file {
+      padding: 5px 42px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* Style the submit button */
+    .btn-primary {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 150px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Add hover effect on the submit button */
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    #pnameError {
+      margin-top: 20px;
+      color: red;
+    }
+  </style>
+
+
+  <script>
+    $(document).ready(function () {
+      // Function to validate the price input
+      function validatePrice() {
+        var priceInput = parseFloat($("#price").val());
+        if (isNaN(priceInput) || priceInput <= 0) {
+          $("#price-error").text("Price must be greater than 0.");
+          return false;
+        } else {
+          $("#price-error").text("");
+          return true;
+        }
+      }
+
+      // Attach the validation function to the form submission
+      $(".product-form").submit(function () {
+        return validatePrice();
+      });
+
+      // Attach the validation function to the price input's change event
+      $("#price").change(validatePrice);
+
+
+      function validateImages() {
+        var img1 = $("#img1").val();
+        var img2 = $("#img2").val();
+        var img3 = $("#img3").val();
+
+        if (img1 === img2 || img1 === img3 || img2 === img3) {
+          $("#image-error").text("Image files must be different.");
+          return false;
+        } else {
+          $("#image-error").text("");
+          return true;
+        }
+      }
+
+      // Attach the validation function to the form submission
+      $(".product-form").submit(function () {
+        return validateImages();
+      });
+
+      // Attach the validation function to the change event of image inputs
+      $("#img1, #img2, #img3").change(validateImages);
+    });
+
+
+
+
+
+    function validateImage1(event) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const file = event.target.files[0];
+    const errorElement = document.getElementById('prodImageError1'); // Fixing typo here
+
+    if (file) {
+        if (allowedTypes.includes(file.type)) {
+            errorElement.textContent = ''; // Clear any previous error message
+            document.getElementById('saveButton').removeAttribute('disabled');
+        } else {
+            errorElement.textContent = 'Only JPEG, PNG, and GIF images are allowed.'; // Display error message
+            document.getElementById('saveButton').setAttribute('disabled', 'true');
+        }
+    }
+}
+
+function validateImage2(event) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const file = event.target.files[0];
+    const errorElement = document.getElementById('prodImageError2'); // Fixing typo here
+
+    if (file) {
+        if (allowedTypes.includes(file.type)) {
+            errorElement.textContent = ''; // Clear any previous error message
+            document.getElementById('saveButton').removeAttribute('disabled');
+        } else {
+            errorElement.textContent = 'Only JPEG, PNG, and GIF images are allowed.'; // Display error message
+            document.getElementById('saveButton').setAttribute('disabled', 'true');
+        }
+    }
+}
+
+function validateImage3(event) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const file = event.target.files[0];
+    const errorElement = document.getElementById('prodImageError3'); // Fixing typo here
+
+    if (file) {
+        if (allowedTypes.includes(file.type)) {
+            errorElement.textContent = ''; // Clear any previous error message
+            document.getElementById('saveButton').removeAttribute('disabled');
+        } else {
+            errorElement.textContent = 'Only JPEG, PNG, and GIF images are allowed.'; // Display error message
+            document.getElementById('saveButton').setAttribute('disabled', 'true');
+        }
+    }
+}
+
+  </script>
+
+
+
+</head>
+
+
+
+
+<div class="pagetitle">
+  <h1>Add Product</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+  </nav>
+</div><!-- End Page Title -->
+<!-- <h1>Save Product</h1> -->
+<form method="post" enctype="multipart/form-data" class="product-form">
+  {% csrf_token %}
+ <div style="display: flex; flex-direction: row; gap: 20px;">
+  <div>
+    <div class="form-group">
+      <label for="product_name">Product Name:</label>
+      <input type="text" name="product_name" required class="form-control" id="product_name">
+      <span id="pnameError" class="error"></span>
+      <span id="pname1Error" class="error"></span>
+    </div>
+
+    <!-- <div class="form-group">
+      <label for="fish">Fish:</label>
+      <select name="fish" required class="form-control">
+        {% for fishes in fish %}
+        <option value="{{ fishes.fish_id}}">{{ fishes.fish_name}}</option>
+        {% endfor %}
+      </select>
+    </div> -->
+
+    <div class="form-group">
+      <label for="subcategory">Subcategory:</label>
+      <select name="subcategory" required class="form-control">
+        {% for subcategory in subcategories %}
+        <option value="{{ subcategory.sub_cat_id }}">{{ subcategory.sub_cat_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" name="price" step="0.01" required class="form-control">
+            </div> -->
+    <div class="form-group">
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price" min="1" step="0.01" required class="form-control">
+      <span id="price-error" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea style="height: 81px;" id="description" name="description" required class="form-control"></textarea>
+    </div>
+  </div>
+
+  <div>
+    <div class="form-group">
+      <label for="quantity">Quantity:</label>
+      <input style="width: 397px;" type="number" id="quantity" name="quantity" min="1" required class="form-control">
+      <span id="quant-error" class="text-danger"></span>
+    </div>
+  
+   
+  
+    <!-- <div class="form-group">
+      <label for="instruction">Instruction:</label>
+      <textarea style="width: 397px;" id="instruction" name="instruction" required class="form-control"></textarea>
+    </div> -->
+  
+    <!-- <div class="form-group">
+            <label for="img1">Image 1:</label>
+            <input type="file" id="img1" name="img1" accept="image/*" required class="form-control-file">
+        </div>
+    
+        <div class="form-group">
+            <label for="img2">Image 2:</label>
+            <input type="file" id="img2" name="img2" accept="image/*" required class="form-control-file">
+        </div>
+    
+        <div class="form-group">
+            <label for="img3">Image 3:</label>
+            <input type="file" id="img3" name="img3" accept="image/*" required class="form-control-file">
+        </div> -->
+  
+    <div class="form-group">
+      <label for="img1">Image 1:</label>
+      <input type="file" id="img1" name="img1" accept="image/*" required class="form-control-file" onchange="validateImage1(event)">
+      <span style="color:red" id="prodImageError1" class="error"></span></br>
+
+    </div>
+  
+    <div class="form-group">
+      <label for="img2">Image 2:</label>
+      <input type="file" id="img2" name="img2" accept="image/*" required class="form-control-file" onchange="validateImage2(event)">
+      <span style="color:red" id="prodImageError2" class="error"></span></br>
+
+    </div>
+  
+    <div class="form-group">
+      <label for="img3">Image 3:</label>
+      <input type="file" id="img3" name="img3" accept="image/*" required class="form-control-file" onchange="validateImage3(event)">
+      <span style="color:red" id="prodImageError3" class="error"></span></br>
+
+    </div>
+  
+    <span id="image-error" class="text-danger"></span>
+  
+  </div>
+ </div>
+  <button style="    width: 801px;
+  height: 58px; background-color: #FFD333;" id="saveButton" type="submit" class="btn btn-primary"><b>Save Product</b></button>
+
+</form>
+
+
+{% endblock%}

@@ -1,0 +1,439 @@
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+
+{% load static %}
+
+<head> <script>
+                  function validatePhoneNumber(phoneNumberValue) {
+    // Define the regular expression pattern
+    const pattern = ^\d{10}$;
+
+    // Get the error message element
+    const errorMessageElement = document.getElementById('error-message');
+
+    // Test if the input matches the pattern
+    if (!pattern.test(phoneNumberValue)) {
+        // The input does not match the pattern, so it's invalid.
+        // Display an error message.
+        errorMessageElement.textContent = 'Please enter a valid Indian phone number.';
+        return false;
+    } else {
+
+        // Clear any existing error message if the input is valid.
+        errorMessageElement.textContent = '';
+        return true;
+    }
+}
+
+                  </script>
+                  </head>
+
+<div class="pagetitle">
+  <h1> View Profile</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <!-- <li class="breadcrumb-item"><a href="index.html">Home</a></li> -->
+      <li class="breadcrumb-item">Users</li>
+      <li class="breadcrumb-item active">Profile</li>
+    </ol>
+  </nav>
+</div><!-- End Page Title -->
+
+<section class="section profile">
+  <div class="row">
+    <div class="col-xl-4">
+
+      <div class="card">
+        <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+          {% if user_profile.profile_image %}
+          <img id="hello" src="{{ user_profile.profile_image.url }}" alt="Profile"
+            style="width:150px; height:131px; border-radius:206px">
+          {% else %}
+          <img src="{% static 'img/login/profilenone.webp' %}" alt="Default Profile"
+            style="width:250px; height:250px;">
+          {% endif %} <h2>
+            {{ user_profile.user.username }}
+          </h2>
+          {% if user.is_superuser %}
+          <h6>
+            Admin
+          </h6>
+          {% elif user.is_staff %}
+          <h6>
+            Seller
+          </h6>
+          <p class="proile-rating">RANKINGS : <span>8/10</span></p>
+          {% else %}
+          <h6>
+            User
+          </h6>
+          {% endif %}
+          <div class="social-links mt-2">
+            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-xl-8">
+
+      <div class="card">
+        <div class="card-body pt-3">
+          <!-- Bordered Tabs -->
+          <ul class="nav nav-tabs nav-tabs-bordered">
+
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+            </li>
+
+            <li class="nav-item">
+              <button id="ed_prof" class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+            </li>
+
+            <!-- <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                </li> -->
+
+          </ul>
+          <div class="tab-content pt-2">
+
+            <div class="tab-pane fade show active profile-overview" id="profile-overview">
+              <!-- <h5 class="card-title">About</h5>
+              <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus.
+                Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet
+                perspiciatis odit. Fuga sequi sed ea saepe at unde.</p> -->
+
+              <h5 class="card-title">Profile Details</h5>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label ">First Name</div>
+                <div class="col-lg-9 col-md-8">{{ user_profile.user.first_name }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label ">Last Name</div>
+                <div class="col-lg-9 col-md-8">{{ user_profile.user.last_name }}</div>
+              </div>
+
+              {% if user.is_staff and not user.is_superuser %}
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Company</div>
+                <div class="col-lg-9 col-md-8">{{ seller_request.company }}</div>
+              </div>
+              {% endif %}
+
+              {% comment %} <div class="row">
+                <div class="col-lg-3 col-md-4 label">Mobile</div>
+                <div class="col-lg-9 col-md-8">{{ user_profile.mobile }}</div>
+              </div> {% endcomment %}
+
+              <!-- <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Email</div>
+                    <div class="col-lg-9 col-md-8">{{ request.user.email }}</div>
+                  </div> -->
+
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Address</div>
+                <div class="col-lg-9 col-md-8">{{ user_addr.address1 }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Address</div>
+                <div class="col-lg-9 col-md-8">{{ user_addr.address2 }}</div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+
+
+
+              <!-- Profile Edit Form -->
+              <script>
+                function validateImage(event) {
+                  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                  const file = event.target.files[0];
+                  const errorElement = document.getElementById('imageError');
+              
+                  if (file && allowedTypes.includes(file.type)) {
+                    errorElement.classList.add('d-none');
+                    document.getElementById('submitBtn').removeAttribute('disabled');
+                  } else {
+                    errorElement.classList.remove('d-none');
+                    document.getElementById('submitBtn').setAttribute('disabled', 'true');
+                  }
+                }
+              
+                function validateFirstName() {
+    const firstNameInput = document.getElementById('fullName');
+    const firstName = firstNameInput.value.trim();
+    const errorElement = document.getElementById('firstNameError');
+
+    // Regular expression to check if the first name starts with a letter and does not contain special characters
+    const regex = /^[A-Za-z][A-Za-z\s]*$/;
+
+    if (regex.test(firstName)) {
+      errorElement.classList.add('d-none');
+      document.getElementById('submitBtn').removeAttribute('disabled');
+
+    } else {
+      errorElement.classList.remove('d-none');
+      document.getElementById('submitBtn').setAttribute('disabled', 'true');
+
+    }
+  }
+
+
+
+  function validateLastName() {
+    const lastNameInput = document.getElementById('lastName');
+    const lastName = lastNameInput.value.trim();
+    const errorElement = document.getElementById('lastNameError');
+
+    // Regular expression to check if the last name starts with a letter and does not contain special characters
+    const regex = /^[A-Za-z][A-Za-z\s]*$/;
+
+    if (regex.test(lastName)) {
+      errorElement.classList.add('d-none');
+      document.getElementById('submitBtn').removeAttribute('disabled');
+
+    } else {
+      errorElement.classList.remove('d-none');
+      document.getElementById('submitBtn').setAttribute('disabled', 'true');
+
+    }
+  }
+
+  function validateAddresss() {
+    const addressInput = document.getElementById('address1');
+    const address = addressInput.value.trim();
+    const errorElement = document.getElementById('addressError');
+
+    // Regular expression to check if the address does not start with a special character
+    const regex = /^[^~`!@#$%^&*()_+={}[\]|\\:;"'<,>.?/]*[A-Za-z][^~`!@#$%^&*()_+={}[\]|\\:;"'<,>.?/]*$/;
+
+    if (regex.test(address)) {
+      errorElement.classList.add('d-none');
+    } else {
+      errorElement.classList.remove('d-none');
+    }
+  }
+  function validateAddress() {
+    const addressInput = document.getElementById('address2');
+    const address = addressInput.value.trim();
+    const errorElement = document.getElementById('addressError2');
+
+    // Regular expression to check if the address does not start with a special character
+    const regex = /^[^~`!@#$%^&*()_+={}[\]|\\:;"'<,>.?/]*[A-Za-z][^~`!@#$%^&*()_+={}[\]|\\:;"'<,>.?/]*$/;
+
+    if (regex.test(address)) {
+      errorElement.classList.add('d-none');
+    } else {
+      errorElement.classList.remove('d-none');
+    }
+  }
+
+
+
+
+                function validateForm() {
+                  const fileInput = document.getElementById('img1');
+                  if (fileInput.files.length === 0) {
+                    alert('Please select an image file.');
+                    return false;
+                  }
+                  return true;
+                }
+              </script>
+
+
+
+              <form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data" onsubmit="return validateForm()">
+                {% csrf_token %}
+
+                <div class="row mb-3">
+
+                  <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input type="file" id="img1" name="img1" onchange="validateImage(event)" accept="image/*" class="form-control-file">
+                    <small id="imageError" class="text-danger d-none">Please select a valid image file (JPEG, PNG, GIF).</small>
+                  </div>
+                </div>
+                <div class="row mb-3">
+
+                  <label for="fullName" class="col-md-4 col-lg-3 col-form-label"></label>
+                  <div class="col-md-8 col-lg-9">
+                    {% if user_profile.profile_image %}
+                    <img id="img1_preview" src="{{ user_profile.profile_image.url }}" alt="Image 1"><br><br>
+                    {% else %}
+                    <img id="img1_preview" src="{% static 'img/login/profilenone.webp' %}" alt="Image 1"><br><br>
+                    <!-- <img id="img1_preview" style=" display: none;"> -->
+                    {% endif %}
+                  </div>
+                </div>
+          
+
+
+                <div class="row mb-3">
+                  <label for="fullName" class="col-md-4 col-lg-3 col-form-label">First Name</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input name="first_name" type="text" class="form-control" id="fullName" value="{{ user_profile.user.first_name }}"
+                      oninput="validateFirstName()">
+                    <small id="firstNameError" class="text-danger d-none">First name must start with a letter and not contain special characters.</small>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input name="last_name" type="text" class="form-control" id="lastName" value="{{ user_profile.user.last_name }}"
+                      oninput="validateLastName()">
+                    <small id="lastNameError" class="text-danger d-none">Last name must start with a letter and not contain special characters.</small>
+                  </div>
+                
+                </div>
+
+                {% if user.is_staff and not user.is_superuser %}
+                <div class="row mb-3">
+                  <label for="Address" class="col-md-4 col-lg-3 col-form-label">Company</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input name="company" type="text" class="form-control" id="Address"
+                      value="{{ seller_request.company }}">
+                  </div>
+                </div>
+                {% endif %}
+
+                
+
+
+
+                  <div class="row mb-3">
+                    <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Address1</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="address1" type="text" class="form-control" id="address1" value="{{ user_addr.address1 }}"
+                        oninput="validateAddresss()">
+                      <small id="addressError" class="text-danger d-none">Address must start with a letter and not contain special characters.</small>
+                    </div>
+                  </div>
+
+                <div class="row mb-3">
+                  <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Address2</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input name="address2" type="text" class="form-control" id="address2"
+                      value="{{ user_addr.address2 }}" oninput="validateAddress()">
+                      <small id="addressError2" class="text-danger d-none">Address must start with a letter and not contain special characters.</small>
+
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <button id="submitBtn" type="submit" class="btn btn-primary" disabled>Save Changes</button>
+                </div>
+              </form>
+              
+              
+              
+              
+              <!-- End Profile Edit Form -->
+              <script>
+                function viewImage1(event) {
+                  document.getElementById('img1_preview').src = URL.createObjectURL(event.target.files[0])
+                }
+
+              </script>
+            </div>
+
+            <div class="tab-pane fade pt-3" id="profile-settings">
+
+              <!-- Settings Form -->
+              <form>
+
+                <div class="row mb-3">
+                  <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
+                  <div class="col-md-8 col-lg-9">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="changesMade" checked>
+                      <label class="form-check-label" for="changesMade">
+                        Changes made to your account
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="newProducts" checked>
+                      <label class="form-check-label" for="newProducts">
+                        Information on new products and services
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="proOffers">
+                      <label class="form-check-label" for="proOffers">
+                        Marketing and promo offers
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
+                      <label class="form-check-label" for="securityNotify">
+                        Security alerts
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <button id="ssub" type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form><!-- End settings Form -->
+
+            </div>
+
+            <div class="tab-pane fade pt-3" id="profile-change-password">
+              <!-- Change Password Form -->
+              <form>
+
+                <div class="row mb-3">
+                  <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input name="password" type="password" class="form-control" id="currentPassword">
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input name="newpassword" type="password" class="form-control" id="newPassword">
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                  <div class="col-md-8 col-lg-9">
+                    <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Change Password</button>
+                </div>
+              </form><!-- End Change Password Form -->
+
+            </div>
+
+          </div><!-- End Bordered Tabs -->
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+{% endblock%}

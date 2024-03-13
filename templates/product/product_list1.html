@@ -1,0 +1,316 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Admin</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/simple-datatables/style.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'assets/css/style.css' %}"  rel="stylesheet">
+
+  
+  <style>
+    /* Apply styles to the table */
+.product-table {
+    width: 50%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+/* Apply styles to table header (th) */
+.product-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Apply styles to table data (td) */
+.product-table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Add hover effect on table rows */
+.product-table tr:hover {
+    background-color: #e0e0e0;
+}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="d-none d-lg-block">Seller</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'user_profile_view' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+       
+      {% if user.is_superuser and user.is_staff %}
+
+      <li class="nav-item" >
+        <a class="nav-link collapsed"  href="{% url 'product_list' %}">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Add Category</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+      </li>
+      
+      <li class="nav-item" >
+        <a class="nav-link collapsed"  href="{% url 'product_list' %}">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Add Subcategory</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+      </li>
+      <li class="nav-item" >
+        <a class="nav-link collapsed"  href="{% url 'product_list' %}">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Delete Category</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+      </li>
+      <li class="nav-item" >
+        <a class="nav-link collapsed"  href="{% url 'product_list' %}">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Delete Category</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+      </li>
+
+      {% endif %}
+
+      {% if not user.is_superuser and user.is_staff %}
+
+      <li class="nav-item" >
+        <a class="nav-link collapsed"  href="{% url 'product_list' %}">
+          <i class="bi bi-layout-text-window-reverse"></i><span>List all products</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <!-- <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav"> -->
+          <!-- <li>
+            <a href="tables-general.html">
+              <i class="bi bi-circle"></i><span>General Tables</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <i class="bi bi-circle"></i><span>Data Tables</span>
+            </a>
+          </li> -->
+          
+        <!-- </ul> -->
+
+      </li><!-- End Tables Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'add_product' %}">
+          <i class="bi bi-menu-button-wide"></i><span>Add Product</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <!-- <li onclick="showmain('main1')">Show main 1</li>
+          <li onclick="showmain('main2')">Show main 2</li> -->
+        <!-- <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="components-alerts.html">
+              <i class="bi bi-circle"></i><span>Alerts</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-accordion.html">
+              <i class="bi bi-circle"></i><span>Accordion</span>
+            </a>
+          </li>
+          
+        </ul> -->
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>Modify Product</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        
+      </li><!-- End Forms Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-bar-chart"></i><span>Delete products</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <!-- <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="charts-chartjs.html">
+              <i class="bi bi-circle"></i><span>Chart.js</span>
+            </a>
+          </li>
+        </ul> -->
+      </li><!-- End Charts Nav -->
+
+      {% endif %}
+
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+
+     
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-contact.html">
+          <i class="bi bi-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </li><!-- End Contact Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-register.html">
+          <i class="bi bi-card-list"></i>
+          <span>Register</span>
+        </a>
+      </li><!-- End Register Page Nav -->
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+ 
+
+
+  <main id="main1" class="main">
+    <div class="pagetitle">
+      <h1>Product List</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+    </div><form id="product-search-form">
+      <label for="product-name" class="search-label">Search by Product Name:</label>
+      <input type="text" id="product-name" name="product-name" class="search-input">
+      <button type="button" class="search-button">Search</button>
+  </form>
+
+  <table class="product-table" style="margin-top: 50px;">
+      <thead>
+          <tr>
+              <th>Product ID</th>
+              <th>Product Name</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for product in products %}
+              <tr>
+                  <td>{{ product.prod_id }}</td>
+                  <td>{{ product.prod_name }}</td>
+                  <td><button><a href="{% url 'modify_product' product.prod_id %}">modify</a></button></td>
+              </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+
+  <span id="no-results" style="display: none;">No matching records found.</span>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('#product-search-form');
+        const input = document.querySelector('#product-name');
+        const rows = document.querySelectorAll('.product-table tbody tr');
+        const noResults = document.querySelector('#no-results');
+
+        input.addEventListener('input', function () {
+            const searchTerm = input.value.toLowerCase();
+
+            rows.forEach(function (row) {
+                const productName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                if (productName.startsWith(searchTerm)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            const visibleRows = [...rows].filter(row => row.style.display !== 'none');
+            if (visibleRows.length === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+  
+ <!-- <a href="">modify</a><button><a href="">Delete</a> -->
+        <!-- <button><a href="">Add to Cart</a></button> -->
+        
+        
+  </main>
+
+  
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Aqueon</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+<script src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+<script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/vendor/chart.js/chart.umd.js' %}"></script>
+<script src="{% static 'assets/vendor/echarts/echarts.min.js' %}"></script>
+<script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
+<!-- <script src="{% static 'assets/vendor/simple-datatables/simple-datatables.js' %}"></script> -->
+<script src="{% static 'assets/vendor/tinymce/tinymce.min.js' %}"></script>
+<script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>

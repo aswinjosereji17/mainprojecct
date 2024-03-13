@@ -1,0 +1,8 @@
+<div id="filtered-products" class="col-lg-9 col-md-8">
+    {% for product in filtered_products %}
+        <div>
+            <h3>{{ product.prod_name }}</h3>
+            <p>Price: ${{ product.price }}</p>
+        </div>
+    {% endfor %}
+</div>

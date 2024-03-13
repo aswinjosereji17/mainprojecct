@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Product</title>
+</head>
+<body>
+    <h1>Add Product</h1>
+    <form method="post">
+        {% csrf_token %}
+        
+        <label for="prod_name">Product Name:</label>
+        <input type="text" id="prod_name" name="prod_name" required>
+        <br>
+
+        <label for="category">Category:</label>
+        <select id="category" name="category" required>
+            <option value="" disabled selected>Select a category</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.categ_name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <label for="sub_categ_id">Subcategory:</label>
+        <select id="sub_categ_id" name="sub_categ_id" required>
+            <option value="" disabled selected>Select a subcategory</option>
+        </select>
+        <br>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01" required>
+        <br>
+
+        <button type="submit">Add Product</button>
+    </form>
+
+    <script>
+        const categoryDropdown = document.getElementById('category');
+        const subcategoryDropdown = document.getElementById('sub_categ_id');
+
+        categoryDropdown.addEventListener('change', () => {
+            subcategoryDropdown.innerHTML = '<option value="" disabled selected>Select a subcategory</option>';
+
+            const selectedCategoryId = categoryDropdown.value;
+            if (selectedCategoryId) {
+                fetchSubcategories(selectedCategoryId);
+            }
+        });
+
+        function fetchSubcategories(categoryId) {
+            const subcategoryOptionsDiv = document.getElementById('subcategory-options');
+            subcategoryOptionsDiv.innerHTML = '';
+
+            fetch(`/get_subcategories/${categoryId}/`)  // Replace with your actual URL pattern
+                .then(response => response.json())
+                .then(subcategories => {
+                    subcategories.forEach(subcategory => {
+                        const option = document.createElement('option');
+                        option.value = subcategory.id;
+                        option.textContent = subcategory.name;
+                        subcategoryDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching subcategories:', error);
+                });
+        }
+    </script>
+</body>
+</html>

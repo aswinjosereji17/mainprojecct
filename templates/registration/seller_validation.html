@@ -1,0 +1,151 @@
+
+            if (!emailRegex.test(email)) {
+                emailError.textContent = "Invalid email address";
+                return false;
+            } else {
+                emailError.textContent = "";
+            }
+        
+            if (password.length < 8) {
+                passwordError.textContent = "Password must contain at least 8 characters";
+                return false;
+            } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+                passwordError.textContent = "Password must contain one uppercase letter, one lowercase letter, and one digit";
+                return false;
+            } else {
+                passwordError.textContent = "";
+            }
+        
+            if (password !== confirmPassword) {
+                confirmPasswordError.textContent = "Passwords do not match";
+                return false;
+            } else {
+                confirmPasswordError.textContent = "";
+            }
+        
+            return true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+        function validateRegistrationForm() {
+            var name = document.getElementById("name").value;
+            var company_name = document.getElementById("company_name").value.trim();
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+
+            var nameError= document.getElementById("nameError")
+            var emailError = document.getElementById("emailError");
+            var passwordError = document.getElementById("passwordError");
+            var confirmPasswordError = document.getElementById("confirmPasswordError");
+        
+            // Clear previous error messages
+            nameError.textContent = "";
+            emailError.textContent = "";
+            passwordError.textContent = "";
+            confirmPasswordError.textContent = "";
+        
+            var emailRegex = /\S+@\S+\.\S+/;
+            var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*()_+,.?]{8,}$/;
+        
+          
+
+            if (!/^[A-Za-z]/.test(name)) {
+            document.getElementById("nameError").textContent = "Username must start with alphabets.";
+            document.getElementById("name").classList.add("error-border");
+            valid = false;
+            } else {
+            document.getElementById("nameError").textContent = "";
+            document.getElementById("name").classList.remove("error-border");
+            }
+
+        }
+        
+      
+        function getInvalidPasswordMessage(password) {
+            if (password.length < 8) {
+                return "Minimum 8 characters required";
+            } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+                return "Password must contain at least one uppercase letter, one lowercase letter, and one digit";
+            } else {
+                return "";
+            }
+        }
+        {% comment %} document validation {% endcomment %}
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signup-form');
+            const documentInput = document.getElementById('document');
+
+            form.addEventListener('submit', function(event) {
+                if (!documentInput.files.length) {
+                    event.preventDefault();
+                    alert('Please select a document before submitting.');
+                }
+            });
+        });  
+      
+        var nameInput = document.getElementById("name").value;
+        var companyNameInput = document.getElementById("company_name").value;
+        var nameInput = document.getElementById("name");
+        var emailInput = document.getElementById("email");
+        var passwordInput = document.getElementById("password");
+        var confirmPasswordInput = document.getElementById("confirmPassword");
+      
+        // Add input event listener to name input
+        nameInput.addEventListener("input", function() {
+          var name = nameInput.value;
+          var errorMessage = getInvalidNameMessage(name);
+          document.getElementById("nameError").textContent = errorMessage;
+        });
+      
+        // Add input event listener to mobile input
+        
+          
+        nameInput.addEventListener("input", function() {
+            var name = nameInput.value;
+            var errorMessage = /^[A-Za-z]/.test(name) ? "" : "Username must start with alphabets.";
+            nameError.textContent = errorMessage;
+        });
+
+        companyNameInput.addEventListener("input", function() {
+            var companyName = companyNameInput.value;
+            var errorMessage = companyName === "" ? "Company name is required." : "";
+            companyNameError.textContent = errorMessage;
+        });
+      
+        // Add input event listener to email input
+        emailInput.addEventListener("input", function() {
+          var email = emailInput.value;
+          var errorMessage = /\S+@\S+\.\S+/.test(email) ? "" : "Invalid email address";
+          document.getElementById("emailError").textContent = errorMessage;
+        });
+      
+        // Add input event listener to password input
+        passwordInput.addEventListener("input", function() {
+          var password = passwordInput.value;
+          var errorMessage = getInvalidPasswordMessage(password);
+          document.getElementById("passwordError").textContent = errorMessage;
+        });
+      
+        // Add input event listener to confirm password input
+        confirmPasswordInput.addEventListener("input", function() {
+          var confirmPassword = confirmPasswordInput.value;
+          var password = passwordInput.value;
+          var errorMessage = confirmPassword === password ? "" : "Passwords do not match";
+          document.getElementById("confirmPasswordError").textContent = errorMessage;
+        });
+        </script>

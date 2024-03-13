@@ -1,0 +1,36 @@
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+<body>
+    <h1>Product Requests</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Requested User</th>
+                <th>Category ID</th>
+                <th>Product Name</th>
+                <th>Image</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in product_requests %}
+                <tr>
+                    <td>{{ request.requested_user.username }}</td>
+                    <td>{{ request.categ_id.categ_name }}</td>
+                    <td>{{ request.product_name }}</td>
+                    {% if request.image %}
+                        <td><img src="{{ request.image.url }}" alt="Product Image"></td>
+                    {% else %}
+                        <!-- Provide a default image if no image is available -->
+                        <td><img src="{% static 'img/not-found.svg' %}" alt="Default Image"></td>
+                    {% endif %}
+                    <td>{{ request.created_at }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+{% endblock %}

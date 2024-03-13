@@ -1,0 +1,16 @@
+<!-- top_products.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Top Products</title>
+</head>
+<body>
+    <h1>Top 5 Products with Highest Sentiment Scores</h1>
+    
+    <ul>
+        {% for product in products_with_sentiment_sum %}
+            <li>{{ product.prod_name }} - Sentiment Sum: {{ product.sentiment_sum }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

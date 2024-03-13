@@ -1,0 +1,145 @@
+Species,Aggression Level,Social Behavior,Territoriality,Schooling Behavior,Predatory,Size,Compatibility
+African Butterflyfish,0.3,0.5,0.4,0.6,0,3,1
+African Leaf Fish,0.5,0.3,0.4,0.6,0,3,1
+African Lungfish,0.7,0.1,0.9,0.1,1,36,1
+Angelfish,0.5,0.4,0.7,0.4,1,6,1
+Apistogramma,0.5,0.4,0.4,0.5,0,3,1
+Arapaima,0.9,0.1,0.9,0.1,1,118,0
+Archerfish,0.8,0.4,0.6,0.3,1,12,1
+Arowana,0.8,0.1,0.9,0.1,1,30,0
+Banded Archerfish,0.8,0.4,0.7,0.3,1,10,1
+Banjo Catfish,0.3,0.6,0.4,0.7,0,6,1
+Betta,0.9,0.2,0.8,0.2,1,2.5,0
+Black Arowana,0.9,0.1,0.9,0.1,1,36,0
+Black Convict Cichlid,0.7,0.4,0.6,0.5,1,6,1
+Black Diamond Stingray,0.7,0.3,0.8,0.2,1,18,1
+Black Ghost Knifefish,0.6,0.5,0.6,0.4,1,20,1
+Black Molly,0.2,0.5,0.2,0.4,0,3,2
+Blood Parrot Cichlid,0.5,0.3,0.5,0.4,0,8,2
+Blue Acara,0.6,0.4,0.6,0.3,1,6,1
+Blue Arowana,0.9,0.2,0.8,0.2,1,30,0
+Blue Diamond Discus,0.3,0.2,0.2,0.3,1,6,2
+Blue Gourami,0.2,0.5,0.3,0.5,0,4,2
+Blue Neon Goby,0.2,0.7,0.5,0.6,0,2.5,2
+Blue Ram Cichlid,0.4,0.4,0.4,0.4,0,2,2
+Bristlenose Pleco,0.1,0.4,0.1,0.6,0,4.5,2
+Bumblebee Goby,0.5,0.4,0.5,0.4,0,2,2
+Butterflyfish,0.3,0.6,0.3,0.6,0,4,2
+Celestial Pearl Danio,0.1,0.7,0.6,0.8,0,1,1
+Cherry Barb,0.4,0.4,0.3,0.5,0,2,2
+Cichlid,0.7,0.5,0.7,0.4,1,6,1
+Clown Knifefish,0.6,0.4,0.6,0.4,0,24,1
+Clown Loach,0.2,0.3,0.5,0.4,0,12,1
+Convict Cichlid,0.8,0.4,0.8,0.4,1,6,1
+Convict Julie,0.5,0.4,0.5,0.4,0,3,2
+Cory Catfish,0.3,0.7,0.5,0.7,0,2.5,1
+Discus,0.5,0.3,0.5,0.3,1,8,2
+Dovii Cichlid,0.9,0.1,0.9,0.1,1,28,0
+Dwarf Flag Cichlid,0.7,0.3,0.6,0.5,1,4,1
+Dwarf Pufferfish,0.9,0.1,0.8,0.1,1,1.5,0
+Electric Blue Acara,0.6,0.5,0.6,0.4,1,6,1
+Electric Blue Jack Dempsey,0.8,0.3,0.7,0.3,1,10,1
+Electric Blue Ram,0.4,0.4,0.4,0.4,0,2,2
+Electric Catfish,0.2,0.6,0.2,0.5,0,10,2
+Endler's Livebearer,0.2,0.7,0.4,0.7,0,1.2,1
+Fire Eel,0.6,0.4,0.5,0.4,1,18,1
+Firemouth Cichlid,0.7,0.4,0.7,0.4,1,6,1
+Flagfish,0.6,0.5,0.5,0.6,0,3,2
+Flowerhorn Cichlid,0.9,0.2,0.8,0.2,1,12,0
+Freshwater Lionfish,0.6,0.3,0.6,0.4,1,12,1
+Geophagus Brasiliensis,0.6,0.4,0.5,0.5,0,8,2
+German Blue Ram,0.4,0.3,0.3,0.5,0,2,2
+Giant Gourami,0.7,0.2,0.8,0.1,1,18,1
+Glass Catfish,0.1,0.7,0.4,0.7,0,3,2
+Glass Knife Fish,0.6,0.4,0.6,0.3,1,12,1
+Glowlight Tetra,0.1,0.6,0.3,0.7,0,1.5,2
+Gold Nugget Pleco,0.1,0.5,0.1,0.4,0,5.5,2
+Golden Nugget Pleco,0.1,0.5,0.1,0.4,0,5.5,2
+Golden Severum,0.6,0.4,0.5,0.5,0,8,2
+Golden Wonder Killifish,0.7,0.2,0.6,0.2,1,3,0
+Gourami,0.6,0.3,0.8,0.3,1,6,1
+Green Chromis,0.4,0.6,0.4,0.7,0,3,2
+Green Neon Tetra,0.2,0.8,0.3,0.9,0,1.2,2
+Green Spotted Puffer,0.8,0.2,0.9,0.2,1,5,1
+Green Terror,0.8,0.3,0.7,0.3,1,10,1
+Green Terror Cichlid,0.8,0.4,0.7,0.3,1,10,1
+Guppy,0.3,0.7,0.5,0.8,0,2,1
+Harlequin Rasbora,0.2,0.6,0.6,0.6,0,2,1
+Hatchetfish,0.2,0.5,0.1,0.8,0,2,2
+Hillstream Loach,0.2,0.6,0.3,0.6,0,4,1
+Jack Dempsey,0.9,0.2,0.9,0.2,1,14,0
+Jaguar Cichlid,0.8,0.3,0.8,0.3,1,16,1
+Killifish,0.4,0.5,0.4,0.6,0,2.5,1
+Kissing Gourami,0.5,0.3,0.6,0.4,1,12,1
+Koi,0.3,0.5,0.2,0.3,0,18,2
+Koi Betta,0.8,0.3,0.9,0.3,1,2.5,0
+Kribensis,0.5,0.6,0.5,0.7,0,4,1
+Kuhli Loach,0.3,0.2,0.6,0.3,0,3,1
+Leaffish,0.4,0.4,0.4,0.5,0,5,2
+Leopard Danio,0.2,0.7,0.5,0.8,0,2,1
+Lionfish,0.9,0.1,0.9,0.1,1,12,0
+Mbu Puffer,0.8,0.1,0.8,0.1,1,24,1
+Mollies,0.2,0.6,0.4,0.6,0,4,2
+Monodactylus,0.4,0.5,0.5,0.5,0,8,2
+Neon Tetra,0.2,0.8,0.3,0.9,0,1.2,1
+Oscar,0.8,0.3,0.7,0.3,1,14,0
+Otocinclus Catfish,0.1,0.7,0.2,0.7,0,2,1
+Panda Corydoras,0.3,0.6,0.4,0.8,0,2.5,1
+Paradise Fish,0.6,0.2,0.8,0.2,1,3,1
+Parrotfish,0.6,0.4,0.5,0.4,0,12,2
+Pea Puffer,0.9,0.1,0.8,0.1,1,1.2,0
+Peacock Bass,0.8,0.2,0.9,0.1,1,22,0
+Peacock Gudgeon,0.1,0.7,0.2,0.9,0,2.5,1
+Pearl Gourami,0.3,0.4,0.4,0.4,0,4,1
+Pictus Catfish,0.4,0.7,0.4,0.7,0,6,1
+Piranha,0.9,0.1,0.9,0.1,1,12,0
+Platy,0.1,0.5,0.2,0.6,0,2.5,2
+Pleco,0.1,0.4,0.1,0.5,0,12,2
+Rainbow Cichlid,0.6,0.4,0.6,0.5,0,6,1
+Rainbow Shark,0.8,0.3,0.7,0.2,1,6,1
+Rainbow Snakehead,0.8,0.2,0.9,0.2,1,28,1
+Rainbowfish,0.2,0.6,0.3,0.6,0,4,1
+Rasbora,0.3,0.7,0.7,0.7,0,2,1
+Red Crystal Shrimp,0.1,0.7,0.1,0.8,0,1.5,2
+Red Devil Cichlid,0.9,0.2,0.9,0.2,1,14,1
+Red Rainbowfish,0.3,0.6,0.4,0.6,0,4,1
+Red Tail Shark,0.7,0.3,0.8,0.3,1,6,1
+Red-Tailed Catfish,0.7,0.4,0.6,0.3,1,18,1
+Siamese Algae Eater,0.3,0.7,0.3,0.8,0,6,1
+Siamese Tigerfish,0.9,0.2,0.8,0.2,1,12,0
+Silver Dollar,0.1,0.6,0.4,0.5,0,6,1
+Sun Catfish,0.4,0.6,0.5,0.6,0,8,1
+Swordtail,0.4,0.6,0.4,0.7,0,4,1
+Threadfin Geophagus,0.5,0.4,0.5,0.4,0,6,1
+Threadfin Rainbowfish,0.2,0.6,0.3,0.5,0,3,1
+Tiger Barb,0.8,0.2,0.9,0.2,1,3,0
+Tiger Oscar,0.9,0.2,0.8,0.2,1,12,0
+Tinfoil Barb,0.6,0.5,0.6,0.4,0,14,1
+Tropheus,0.9,0.2,0.9,0.1,1,6,0
+Upside-Down Catfish,0.3,0.6,0.3,0.6,0,3,1
+Yellow Lab Cichlid,0.5,0.5,0.5,0.5,0,4,1
+Yoyo Loach,0.4,0.5,0.4,0.5,0,4,1
+Zebra Danio,0.3,0.7,0.6,0.8,0,2,1
+Zebra Loach,0.4,0.5,0.4,0.5,0,3,1
+Zebra Moray Eel,0.8,0.2,0.8,0.2,1,20,0
+Zebra Shrimp,0.1,0.6,0.2,0.7,0,1,2
+Zig Zag Eel,0.6,0.4,0.5,0.4,0,16,1
+Zorro Catfish,0.3,0.6,0.4,0.6,0,6,1
+Yellowtail Acei Cichlid,0.5,0.5,0.5,0.5,0,6,1
+Yellowtail Congo Tetra,0.2,0.7,0.5,0.7,0,3,1
+Yellowtail Damsel,0.5,0.6,0.5,0.6,0,4,1
+Yellowtail Rasbora,0.3,0.6,0.4,0.6,0,2,1
+Yellowtail Tang,0.7,0.5,0.7,0.5,0,7,1
+Yellowtail Wrasse,0.6,0.5,0.6,0.5,0,7,1
+Zebra Danio,0.3,0.7,0.6,0.8,0,2,1
+Zebra Loach,0.4,0.5,0.4,0.5,0,3,1
+Zebra Moray Eel,0.8,0.2,0.8,0.2,1,20,0
+Zebra Shrimp,0.1,0.6,0.2,0.7,0,1,2
+Zig Zag Eel,0.6,0.4,0.5,0.4,0,16,1
+Zorro Catfish,0.3,0.6,0.4,0.6,0,6,1
+Yellowtail Acei Cichlid,0.5,0.5,0.5,0.5,0,6,1
+Yellowtail Congo Tetra,0.2,0.7,0.5,0.7,0,3,1
+Yellowtail Damsel,0.5,0.6,0.5,0.6,0,4,1
+Yellowtail Rasbora,0.3,0.6,0.4,0.6,0,2,1
+Yellowtail Tang,0.7,0.5,0.7,0.5,0,7,1
+Yellowtail Wrasse,0.6,0.5,0.6,0.5,0,7,1

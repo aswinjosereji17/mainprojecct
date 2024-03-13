@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Details</title>
+</head>
+<body>
+    <h1>Payment Details</h1>
+    <p>Amount to Pay: ₹<span id="amount-to-pay">{{ amount_to_pay }}</span></p>
+    <!-- Add other payment-related details as needed -->
+</body>
+<script>
+    // Find the "Save" button by its ID
+    var saveButton = document.getElementById("saveButton");
+
+    // Add a click event listener to the "Save" button
+    saveButton.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Get the form element
+        var form = event.target.form;
+
+        // Create a FormData object from the form
+        var formData = new FormData(form);
+
+        // Fetch API to send the form data to the server
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken') // Include the CSRF token in the request header
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirect to the payment_details.html page with the amount
+                window.location.href = `/payment_details/${data.amount_to_pay}/`;
+            } else {
+                // Display the error message
+                var successMessage = document.getElementById("success-message");
+                successMessage.style.color = 'red';
+                successMessage.textContent = data.error_message;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    // Function to get the CSRF token from cookies
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+</html>

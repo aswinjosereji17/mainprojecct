@@ -1,0 +1,323 @@
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="assetss/img/favicon.ico">
+<title>Blog</title>
+<!-- Bootstrap core CSS -->
+<!-- <link href="{% static 'assetss/css/bootstrap.min.css'  %}" rel="stylesheet"> -->
+<!-- Fonts -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="{% static 'assetss/css/mediumish.css' %}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+
+<!-- Begin Nav
+================================================== -->
+
+<!-- End Nav
+================================================== -->
+
+<!-- Begin Site Title
+================================================== -->
+<div class="container">
+	<div class="mainheading">
+		<h1 class="sitetitle">Blog</h1>
+		<p class="lead">
+			 <!-- Bootstrap theme, medium style, simply perfect for bloggers -->
+		</p>
+	</div>
+<!-- End Site Title
+================================================== -->
+
+	<!-- Begin Featured
+	================================================== -->
+	<section class="featured-posts">
+	<div class="section-title">
+		<h2><span>Featured</span></h2>
+	</div>
+	<div class="card-columns listfeaturedtag">
+
+		<!-- begin post -->
+
+		
+{% for post in latest_popular_posts %}
+		<div class="card">
+			<div><div class="row">
+				<div class="col-md-5 wrapthumbnail">
+					<!-- <a href="post.html"> -->
+						<div class="thumbnail" style="background-image:url({{ post.image.url }});">
+						</div>
+					</a>
+				</div>
+				<div class="col-md-7">
+					<div class="card-block">
+						<h2 class="card-title">{{ post.heading }}</h2>
+						<!-- <h4 class="card-text">{{ post.description }}</h4> -->
+						<div class="description">
+							<h4 class="card-text">
+								{% if post.description|length > 100 %}
+									{{ post.description|slice:":100" }}...
+									<span class="read-more-content" style="display: none;">{{ post.description }}</span>
+									<a href="" data-target="#editModal{{ post.post_id }}" class="read-more">read more</a>
+								{% else %}
+									{{ post.description }}
+								{% endif %}
+							</h4>
+						</div>
+
+
+
+
+
+						<div  id="editModal{{ post.post_id }}" class="modal">
+							<div style="max-width: 800px;" class="modal-content">
+								<span class="close">&times;</span>
+								<img style="border-radius: 8px; margin-top: 35px;" src="{{post.image.url}}" alt="">
+								<h5 style="margin-top: 20px;"><b>{{ post.heading }}</b></h5>
+								{% autoescape off %}
+    <p>{{ post.description | safe }}</p>
+{% endautoescape %}
+							</div>
+						</div>
+
+
+
+
+
+
+						<div style="margin-top: 20px;" class="metafooter">
+							<div style="display: flex; flex-direction: row;" class="wrapfooter">
+								<span class="meta-footer-thumb">
+								<img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal">
+								</span>
+								<span class="author-meta">
+								<span class="post-name">{{ post.user }}</span><br/>
+								<span class="post-date">{{ post.date_created }}</span><span class="dot"></span><span class="post-read"></span>
+								</span>
+								<span class="post-read-more">
+									<span id="like-count">{{ post.likes }}</span>
+									<button style="border: none; background-color: white; " class="like-button" data-post-id="{{ post.post_id }}">
+										<!-- <p>{{ post.post_id }}</p> -->
+										<i class="bi bi-hand-thumbs-up" style="font-size: 1.5rem;"></i> 
+									</button>
+								</span>
+																		<!-- <i class="bi bi-hand-thumbs-up" style="font-size: 1.5rem;"></i>  -->
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div></div>
+			<div></div>
+		</div>
+		<!-- end post -->
+
+	
+{% endfor %}
+<!-- <script>
+    document.querySelectorAll('.read-more-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const description = button.previousElementSibling;
+            const readMoreText = description.nextElementSibling;
+            description.style.display = 'none';
+            readMoreText.style.display = 'inline';
+            button.style.display = 'none';
+        });
+    });
+</script> -->
+<script>
+    var readMoreLinks = document.querySelectorAll('.read-more');
+    var modals = document.querySelectorAll('.modal');
+    var closeButtons = document.querySelectorAll('.close');
+
+    readMoreLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var postId = this.getAttribute('data-target');
+            document.querySelector(postId).style.display = "block";
+        });
+    });
+
+    closeButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var modal = this.parentElement.parentElement;
+            modal.style.display = "none";
+        });
+    });
+
+    window.addEventListener('click', function(event) {
+        modals.forEach(function(modal) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+</script>
+
+
+
+
+<script>
+    $(document).ready(function() {
+        $('.like-button').click(function(e) {
+            e.preventDefault();
+            var post_id = $(this).data('post-id');
+			console.log(post_id)
+            var likeCountElement = $(this).closest('.post-read-more').find('#like-count');
+            var icon = $(this).find('i');
+
+            $.ajax({
+                url: "{% url 'like_post' post_id=0 %}".replace('0', post_id),
+                type: "POST",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    // Update like count
+                    likeCountElement.text(response.likes);
+                    // Toggle class to fill the icon with blue
+                    icon.toggleClass('blue-filled');
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors, if any
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .bi-hand-thumbs-up.blue-filled {
+        color: blue;
+    }
+
+
+
+	/* Style for the modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+	overflow: hidden;
+	background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+    padding-top: 10px;
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 15% from the top and centered */
+    padding: 20px;
+    max-height: 700px;
+    overflow-y: scroll; /* Always show scrollbar */
+    scrollbar-width: none; /* Hide default scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide default scrollbar for IE and Edge */
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 0; /* Hide default scrollbar for WebKit browsers (e.g., Chrome, Safari) */
+}
+
+/* Close button */
+.close {
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    right: 15px; /* Adjust as needed */
+    cursor: pointer; /* Add cursor style to indicate it's clickable */
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+</style>
+
+
+	</div>
+	</section>
+	<!-- End Featured
+	================================================== -->
+
+	<!-- Begin List Posts
+	================================================== -->
+	<!-- <section class="recent-posts">
+	<div class="section-title">
+		<h2><span>All Stories</span></h2>
+	</div>
+	<div class="card-columns listrecent">
+
+		<div class="card">
+			<a href="post.html">
+				<img class="img-fluid" src="assetss/img/demopic/5.jpg" alt="">
+			</a>
+			<div class="card-block">
+				<h2 class="card-title"><a href="post.html">Autumn doesn't have to be nostalgic, you know?</a></h2>
+				<h4 class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</h4>
+				<div class="metafooter">
+					<div class="wrapfooter">
+						<span class="meta-footer-thumb">
+						<a href="author.html"><img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal"></a>
+						</span>
+						<span class="author-meta">
+						<span class="post-name"><a href="author.html">Sal</a></span><br/>
+						<span class="post-date">22 July 2017</span><span class="dot"></span><span class="post-read">6 min read</span>
+						</span>
+						<span class="post-read-more"><a href="post.html" title="Read Story"><i class="bi bi-hand-thumbs-up" style="font-size: 1.5rem;"></i></a></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+	</section> -->
+	<!-- End List Posts
+	================================================== -->
+
+	<!-- Begin Footer
+	================================================== -->
+	
+	<!-- End Footer
+	================================================== -->
+
+</div>
+<!-- /.container -->
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{% static 'assetss/js/jquery.min.js' %}"></script>
+<script src="{% static 'https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js' %}" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="{% static 'assetss/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assetss/js/ie10-viewport-bug-workaround.js' %}"></script>
+</body>
+</html>
+{% endblock%}

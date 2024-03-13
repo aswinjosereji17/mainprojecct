@@ -1,0 +1,125 @@
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+
+<head>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get all elements with the class "show-document-link"
+        var showDocumentLinks = document.querySelectorAll(".show-document-link");
+
+        showDocumentLinks.forEach(function (link) {
+            link.addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent the default link behavior
+
+                var documentUrl = this.getAttribute("data-document-url");
+                if (documentUrl) {
+                    // Open the document in a new window or tab
+                    window.open(documentUrl, "_blank");
+                }
+            });
+        });
+    });
+</script>
+</head>
+
+<h1>Sellers Request</h1></br></br>
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>Company Name</th>
+            <th>GSTIN</th>
+            <th>Document</th>
+            <td>Status</td>
+            <td></td>
+            <td></td>
+            
+        </tr>
+    </thead>
+    <tbody>
+    
+        {% for seller_request in seller_requests %}
+        <tr>
+            {% comment %} <td>{{ user.email }}</td>
+            <td>{{ user.userprofile.mobile }}</td>
+            <td>{{ user.sellerrequest.company }}</td>
+            <td>{{ user.sellerrequest.gstin }}</td>
+            <td>{{ user.sellerrequest.document }}</td> {% endcomment %}
+            <td>{{ seller_request.user.email }}</td>
+            <td>{{ seller_request.user.userprofile.mobile }}</td>
+            <td>{{ seller_request.company }}</td>
+            <td>{{ seller_request.gstin }}</td>
+            <td><a href="#" class="show-document-link" data-document-url="{{ seller_request.document.url }}">Show Document</a></td>
+            <td>
+                {% if seller_request.user.is_staff %}
+                <p style="color:green">Approved</p>
+            {% else %}
+                <p>Pending</p>
+            {% endif %}
+            </td>
+            <td>
+                {% if not seller_request.user.is_staff %}
+                <form method="post" action="{% url 'approve_seller' seller_request.user.id %}">
+                    {% csrf_token %}
+                    <button type="submit" style="background-color: green; color: white; width: 120px; margin: auto; padding: 5px; border-radius: 6px; border: none;" class="">Approve</button>
+                </form>
+                {% else %}
+                <form method="post" action="{% url 'dis_approve_seller' seller_request.user.id %}">
+                    {% csrf_token %}
+                    <button type="submit" style="background-color: red; color: white; width: 120px; margin: auto; padding: 5px; border-radius: 6px; border: none;" class="">Disapprove</button>
+                </form>
+                {% endif %}
+            </td>
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Add JavaScript to handle the approve button click -->
+<!-- <script>
+    // Attach a click event handler to the "Approve" button
+    document.addEventListener('DOMContentLoaded', function () {
+        const approveButtons = document.querySelectorAll('.approve-btn');
+        approveButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const userId = this.getAttribute('data-user-id');
+                approveSeller(userId);
+            });
+        });
+
+        // Function to send a POST request to approve the seller
+        function approveSeller(userId) {
+            fetch(`/approve-seller/${userId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        // Update the UI or display a success message
+                        location.reload(); // Reload the page to reflect the updated status
+                    } else {
+                        // Handle errors
+                        console.error('Error approving seller');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    });
+</script> -->
+
+    {% endblock%}

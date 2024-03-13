@@ -1,0 +1,40 @@
+{% extends 'user_prof.html' %}
+
+
+{% block content %}
+
+<!-- <div  style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 70px; margin-left: 70px; "> -->
+
+    {% for post in user_posts %}
+    <div class="card mb-3" style="max-width: 1340px;">
+        <div class="row g-0">
+          <div style="width: 300px;" class="col-md-4">
+            <img src="{{ post.image.url }}" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ post.heading }}</h5>
+              <p class="card-text">{{ post.description }}</p>
+              <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div style="max-width: 740px; max-height: 500px; display: flex; flex-direction: row;">
+        <div>
+          <img style="height: 300px; width: 300px;" src="{{ post.image.url }}" >
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ post.heading }}</h5>
+            <p class="card-text">{{ post.description }}</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+          </div>
+        </div>
+      </div> -->
+    
+      {% endfor %}
+      
+<!-- </div> -->
+{% endblock%}
